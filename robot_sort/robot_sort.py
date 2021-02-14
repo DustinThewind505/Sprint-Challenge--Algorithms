@@ -96,8 +96,33 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        self.set_light_on()    # ========== Turn on light ==========
+
+
+        ### ==================== Keep moving until the empty spot is at the far right ====================
+        while self.light_is_on():
+            self.swap_item()  # ========== Pick up the first item ==========   
+
+            while self.can_move_right():  # ========== Continue moving to the right until it reaches the end ==========  
+                self.move_right()
+
+                if self.compare_item() is not None and self.compare_item() >= 0:    # ========== If the current item is less than the item in hand, swap the two ==========
+                    self.swap_item()
+
+
+            while self.can_move_left():     # ========== Head back to the start position ==========
+                self.move_left()
+
+
+            while self.can_move_right() and self.compare_item() is not None:    # ========== Move to the correct spot for insertion (it will be empty) ==========
+                self.move_right()   # ========== If the curent spot is not empty, keep moving to the right ==========
+
+            self.swap_item()    # ========== Insert the item in the correct spot. Move to the right to begin the cycle again. ==========
+            self.move_right()
+
+
+            if not self.can_move_right():   # ========== If the robot now is at the very end of the list, the sort is completed ==========
+                self.set_light_off()    # ========== Turn on light ==========
 
 
 if __name__ == "__main__":
